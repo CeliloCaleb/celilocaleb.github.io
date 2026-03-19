@@ -131,7 +131,7 @@
             font-family: 'Figtree', sans-serif;
             font-size: 1.3rem;
             font-weight: 800;
-            color: var(--accent);
+            color: var(--accent-text);
             white-space: nowrap;
         }
 
@@ -170,7 +170,7 @@
             position: relative;
         }
         .card:hover    { border-color: var(--border-hover); box-shadow: var(--shadow-lg); }
-        .card.selected { border-color: var(--accent); background: var(--accent-dim); box-shadow: 0 0 0 1px rgba(212,175,55,0.18), var(--shadow-lg); }
+        .card.selected { border-color: var(--accent); background: rgba(255,255,255,0.98); box-shadow: 0 0 0 2px var(--accent), var(--shadow-lg); }
         .card.is-default { }
 
         .radio {
@@ -200,14 +200,14 @@
         .card-type  {
             font-size: 11px; font-weight: 700;
             text-transform: uppercase; letter-spacing: 0.08em;
-            color: var(--accent); margin-bottom: 2px;
+            color: var(--accent-text); margin-bottom: 2px;
         }
         .card-desc  { font-size: 12px; color: var(--text-secondary); margin-top: 2px; line-height: 1.45; }
         .card-delta { font-size: 12px; font-weight: 700; margin-top: 3px; }
         .card-base  { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
 
         .delta-standard { color: var(--text-muted); }
-        .delta-up       { color: var(--accent); }
+        .delta-up       { color: var(--accent-text); }
         .delta-down     { color: var(--green); }
 
         .tag {
@@ -216,7 +216,7 @@
             padding: 2px 8px; border-radius: 100px;
         }
         .tag-default  { background: var(--surface-raised); color: var(--text-muted); }
-        .tag-popular  { background: var(--accent-dim); color: var(--accent); }
+        .tag-popular  { background: var(--accent-dim); color: var(--accent-text); }
 
         /* ── Nav ── */
         .nav { display: flex; gap: 10px; margin-top: 2px; }
@@ -294,7 +294,7 @@
         .total-amount {
             font-family: 'Figtree', sans-serif;
             font-size: 1.3rem; font-weight: 800;
-            color: var(--accent);
+            color: var(--accent-text);
         }
 
         /* ── CTA Section ── */
