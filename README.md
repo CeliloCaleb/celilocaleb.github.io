@@ -1,2 +1,1238 @@
 # celilocaleb.github.io
 Hosting for Celilo Site
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build Your Celilo | Celilo Cycles</title>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg:             #0f0f0d;
+            --surface:        #1a1a17;
+            --surface-raised: #222220;
+            --border:         #2d2d2a;
+            --border-hover:   #4a4a45;
+            --accent:         #bf7a3a;
+            --accent-hover:   #d08d4a;
+            --accent-dim:     rgba(191,122,58,0.1);
+            --text-primary:   #f0ebe0;
+            --text-secondary: #9a9488;
+            --text-muted:     #5f5c55;
+            --green:          #5a8a58;
+            --green-dim:      rgba(90,138,88,0.1);
+            --blue:           #5469d4;
+            --blue-hover:     #4558c0;
+            --blue-dim:       rgba(84,105,212,0.1);
+            --r:              8px;
+            --r-lg:           14px;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text-primary);
+            font-family: 'Figtree', sans-serif;
+            font-size: 15px;
+            line-height: 1.6;
+            overflow-x: hidden; /* hide horizontal scroll; vertical scroll available as fallback before iframe auto-resize kicks in */
+        }
+
+        .app {
+            max-width: 660px;
+            margin: 0 auto;
+            padding: 36px 20px 40px;
+        }
+
+        /* ── Header ── */
+        .header { text-align: center; margin-bottom: 36px; }
+        .header h1 {
+            font-family: 'Figtree', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 6px;
+        }
+        .header p { color: var(--text-secondary); font-size: 14px; }
+
+        /* ── Progress ── */
+        .progress {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin-bottom: 16px;
+        }
+        .prog-step { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .prog-dot {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            background: var(--surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+        .prog-dot.active { border-color: var(--accent); color: var(--accent); }
+        .prog-dot.done   { border-color: var(--green); background: var(--green); color: #fff; }
+        .prog-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            letter-spacing: 0.03em;
+        }
+        .prog-line {
+            flex: 1;
+            height: 2px;
+            background: var(--border);
+            max-width: 36px;
+            margin-bottom: 16px;
+            transition: background 0.2s;
+        }
+        .prog-line.done { background: var(--green); }
+
+        /* ── Running Total ── */
+        .running-total {
+            display: none;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            padding: 12px 18px;
+            margin-bottom: 28px;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+        .running-total.visible { display: flex; }
+        .rt-left {}
+        .rt-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: var(--text-muted);
+            margin-bottom: 1px;
+        }
+        .rt-note { font-size: 11px; color: var(--text-muted); font-style: italic; }
+        .rt-amount {
+            font-family: 'Figtree', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--accent);
+            white-space: nowrap;
+        }
+
+        /* ── Steps ── */
+        .step { display: none; }
+        .step.active { display: block; }
+
+        .step-title {
+            font-family: 'Figtree', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+        .step-sub {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        /* ── Cards ── */
+        .cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+        .card {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: 16px 18px;
+            cursor: pointer;
+            transition: border-color 0.15s, background 0.15s;
+            display: flex;
+            align-items: flex-start;
+            gap: 13px;
+            position: relative;
+        }
+        .card:hover    { border-color: var(--border-hover); }
+        .card.selected { border-color: var(--accent); background: var(--accent-dim); }
+        .card.is-default { }
+
+        .radio {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            flex-shrink: 0;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.15s;
+        }
+        .card.selected .radio { border-color: var(--accent); }
+        .radio-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: var(--accent);
+            transform: scale(0);
+            transition: transform 0.15s;
+        }
+        .card.selected .radio-dot { transform: scale(1); }
+
+        .card-body  { flex: 1; }
+        .card-name  { font-weight: 700; font-size: 15px; color: var(--text-primary); }
+        .card-type  {
+            font-size: 11px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.08em;
+            color: var(--accent); margin-bottom: 2px;
+        }
+        .card-desc  { font-size: 13px; color: var(--text-secondary); margin-top: 3px; line-height: 1.5; }
+        .card-delta { font-size: 13px; font-weight: 700; margin-top: 5px; }
+        .card-base  { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+        .delta-standard { color: var(--text-muted); }
+        .delta-up       { color: var(--accent); }
+        .delta-down     { color: var(--green); }
+
+        .tag {
+            position: absolute; top: 12px; right: 12px;
+            font-size: 11px; font-weight: 700;
+            padding: 2px 8px; border-radius: 100px;
+        }
+        .tag-default  { background: var(--surface-raised); color: var(--text-muted); }
+        .tag-popular  { background: var(--accent-dim); color: var(--accent); }
+
+        /* ── Nav ── */
+        .nav { display: flex; gap: 10px; margin-top: 4px; }
+        .btn {
+            padding: 12px 22px;
+            border-radius: var(--r);
+            font-family: 'Figtree', sans-serif;
+            font-size: 14px; font-weight: 700;
+            cursor: pointer; border: none;
+            transition: all 0.15s; letter-spacing: 0.01em;
+        }
+        .btn-primary { background: var(--accent); color: #fff; flex: 1; }
+        .btn-primary:hover    { background: var(--accent-hover); }
+        .btn-primary:disabled { background: var(--surface-raised); color: var(--text-muted); cursor: not-allowed; }
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+        .btn-ghost:hover { border-color: var(--border-hover); color: var(--text-primary); }
+
+        /* ── Summary ── */
+        .summary-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+        .summary-head { padding: 18px 22px; border-bottom: 1px solid var(--border); }
+        .summary-head-title {
+            font-family: 'Figtree', sans-serif;
+            font-size: 1.2rem; font-weight: 800;
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 12px 22px;
+            border-bottom: 1px solid var(--border);
+            gap: 12px;
+        }
+        .sr-label {
+            font-size: 11px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.06em;
+            color: var(--text-muted); margin-bottom: 2px;
+        }
+        .sr-value  { font-size: 14px; font-weight: 600; }
+        .sr-sub    { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+        .summary-included {
+            padding: 12px 22px;
+            background: var(--green-dim);
+            border-bottom: 1px solid var(--border);
+        }
+        .si-label {
+            font-size: 11px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.06em;
+            color: var(--green); margin-bottom: 2px;
+        }
+        .si-items { font-size: 13px; color: var(--text-secondary); }
+        .summary-note {
+            padding: 10px 22px;
+            font-size: 12px; color: var(--text-muted); font-style: italic;
+            border-bottom: 1px solid var(--border);
+        }
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 22px;
+        }
+        .total-label { font-weight: 700; font-size: 15px; }
+        .total-amount {
+            font-family: 'Figtree', sans-serif;
+            font-size: 1.5rem; font-weight: 800;
+            color: var(--accent);
+        }
+
+        /* ── CTA Section ── */
+        .cta-section { display: flex; flex-direction: column; gap: 12px; }
+        .btn-reserve {
+            background: var(--blue); color: #fff;
+            padding: 15px 24px; font-size: 15px;
+            border-radius: var(--r);
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            width: 100%; cursor: pointer; border: none;
+            font-family: 'Figtree', sans-serif; font-weight: 700;
+            transition: background 0.15s;
+        }
+        .btn-reserve:hover { background: var(--blue-hover); }
+        .divider { text-align: center; font-size: 12px; color: var(--text-muted); }
+        .btn-custom {
+            background: var(--surface-raised); color: var(--text-primary);
+            border: 1px solid var(--border);
+            padding: 14px 24px; font-size: 14px;
+            border-radius: var(--r);
+            width: 100%; cursor: pointer;
+            font-family: 'Figtree', sans-serif; font-weight: 700;
+            transition: border-color 0.15s;
+        }
+        .btn-custom:hover { border-color: var(--border-hover); }
+
+        /* ── Sent confirmation ── */
+        .sent-confirm {
+            display: none;
+            background: var(--green-dim);
+            border: 1px solid rgba(90,138,88,0.3);
+            border-radius: var(--r);
+            padding: 14px 18px;
+            font-size: 13px; color: var(--text-secondary);
+            line-height: 1.55; text-align: center;
+        }
+        .sent-confirm.visible { display: block; }
+        .sent-confirm strong  { color: var(--green); }
+
+        .restart-wrap { text-align: center; }
+        .btn-restart {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 8px 18px; font-size: 13px;
+            border-radius: var(--r); cursor: pointer;
+            font-family: 'Figtree', sans-serif; font-weight: 500;
+            transition: all 0.15s;
+        }
+        .btn-restart:hover { border-color: var(--border-hover); color: var(--text-secondary); }
+
+        /* ── Mobile Responsive ── */
+        @media (max-width: 600px) {
+            .app { padding: 24px 14px 32px; }
+
+            .header h1 { font-size: 1.5rem; }
+            .header p  { font-size: 13px; }
+            .header    { margin-bottom: 24px; }
+
+            /* Progress dots: shrink and tighten */
+            .prog-dot   { width: 24px; height: 24px; font-size: 10px; }
+            .prog-label { font-size: 8px; letter-spacing: 0.01em; }
+            .prog-line  { max-width: 20px; }
+            .progress   { margin-bottom: 12px; }
+
+            /* Running total */
+            .running-total { padding: 10px 14px; margin-bottom: 20px; }
+            .rt-label  { font-size: 10px; }
+            .rt-amount { font-size: 1.1rem; }
+            .rt-note   { font-size: 10px; }
+
+            /* Step titles */
+            .step-title { font-size: 1.15rem; }
+            .step-sub   { font-size: 12px; margin-bottom: 16px; }
+
+            /* Cards */
+            .cards { gap: 8px; margin-bottom: 20px; }
+            .card  { padding: 12px 14px; gap: 10px; border-radius: var(--r); }
+            .radio { width: 18px; height: 18px; }
+            .radio-dot { width: 9px; height: 9px; }
+            .card-name  { font-size: 14px; }
+            .card-type  { font-size: 10px; }
+            .card-desc  { font-size: 12px; }
+            .card-delta { font-size: 12px; }
+            .card-base  { font-size: 11px; }
+            .tag { font-size: 10px; padding: 2px 6px; top: 10px; right: 10px; }
+
+            /* Nav buttons */
+            .nav { gap: 8px; }
+            .btn { padding: 11px 16px; font-size: 13px; }
+
+            /* Summary */
+            .summary-head { padding: 14px 16px; }
+            .summary-head-title { font-size: 1.05rem; }
+            .summary-row  { padding: 10px 16px; }
+            .sr-label  { font-size: 10px; }
+            .sr-value  { font-size: 13px; }
+            .sr-sub    { font-size: 11px; }
+            .summary-included { padding: 10px 16px; }
+            .si-label  { font-size: 10px; }
+            .si-items  { font-size: 12px; }
+            .summary-note { padding: 8px 16px; font-size: 11px; }
+            .total-row { padding: 14px 16px; }
+            .total-label  { font-size: 14px; }
+            .total-amount { font-size: 1.25rem; }
+
+            /* CTAs */
+            .btn-reserve { padding: 13px 18px; font-size: 14px; }
+            .btn-custom  { padding: 12px 18px; font-size: 13px; }
+            .sent-confirm { padding: 12px 14px; font-size: 12px; }
+        }
+
+        @media (max-width: 380px) {
+            .app { padding: 18px 10px 28px; }
+            .header h1 { font-size: 1.3rem; }
+
+            /* Hide text labels on tiny screens, keep dots */
+            .prog-label { display: none; }
+            .prog-dot   { width: 22px; height: 22px; font-size: 9px; }
+            .prog-line  { max-width: 16px; }
+
+            .card { padding: 10px 12px; }
+            .step-title { font-size: 1.05rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+
+    <!-- Header -->
+    <div class="header">
+        <h1>Build Your Celilo</h1>
+        <p>Configure your custom ride, handbuilt in the Pacific Northwest</p>
+    </div>
+
+    <!-- Progress (6 steps) -->
+    <div class="progress" id="progress">
+        <div class="prog-step"><div class="prog-dot active" id="pd-1">1</div><div class="prog-label">Frame</div></div>
+        <div class="prog-line" id="pl-1"></div>
+        <div class="prog-step"><div class="prog-dot" id="pd-2">2</div><div class="prog-label">Fork</div></div>
+        <div class="prog-line" id="pl-2"></div>
+        <div class="prog-step"><div class="prog-dot" id="pd-3">3</div><div class="prog-label">Drivetrain</div></div>
+        <div class="prog-line" id="pl-3"></div>
+        <div class="prog-step"><div class="prog-dot" id="pd-4">4</div><div class="prog-label">Wheels</div></div>
+        <div class="prog-line" id="pl-4"></div>
+        <div class="prog-step"><div class="prog-dot" id="pd-5">5</div><div class="prog-label">Cockpit</div></div>
+        <div class="prog-line" id="pl-5"></div>
+        <div class="prog-step"><div class="prog-dot" id="pd-6">6</div><div class="prog-label">Summary</div></div>
+    </div>
+
+    <!-- Running Total (shown after frame is picked, hidden on summary) -->
+    <div class="running-total" id="running-total">
+        <div class="rt-left">
+            <div class="rt-label">Running Total</div>
+            <div class="rt-note" id="rt-note"></div>
+        </div>
+        <div class="rt-amount" id="rt-amount">-</div>
+    </div>
+
+    <!-- Step 1: Frame -->
+    <div class="step active" id="step-1">
+        <div class="step-title">Choose Your Frame</div>
+        <div class="step-sub">Every Celilo is handbuilt to order. Pick the platform that fits your riding.</div>
+        <div class="cards" id="frame-cards"></div>
+        <div class="nav">
+            <button class="btn btn-primary" id="next-1" onclick="goTo(2)" disabled>Next: Fork →</button>
+        </div>
+    </div>
+
+    <!-- Step 2: Fork -->
+    <div class="step" id="step-2">
+        <div class="step-title">Choose Your Fork</div>
+        <div class="step-sub" id="fork-sub">Select a fork for your build</div>
+        <div class="cards" id="fork-cards"></div>
+        <div class="nav">
+            <button class="btn btn-ghost" onclick="goTo(1)">← Back</button>
+            <button class="btn btn-primary" id="next-2" onclick="goTo(3)" disabled>Next: Drivetrain →</button>
+        </div>
+    </div>
+
+    <!-- Step 3: Drivetrain -->
+    <div class="step" id="step-3">
+        <div class="step-title">Choose Your Drivetrain</div>
+        <div class="step-sub">Shifters, derailleurs, and brakes, complete as a package</div>
+        <div class="cards" id="dt-cards"></div>
+        <div class="nav">
+            <button class="btn btn-ghost" onclick="goTo(2)">← Back</button>
+            <button class="btn btn-primary" id="next-3" onclick="goTo(4)" disabled>Next: Wheels →</button>
+        </div>
+    </div>
+
+    <!-- Step 4: Wheels -->
+    <div class="step" id="step-4">
+        <div class="step-title">Choose Your Wheels</div>
+        <div class="step-sub">Rim and hub combos. Prices shown relative to the standard build.</div>
+        <div class="cards" id="wheels-cards"></div>
+        <div class="nav">
+            <button class="btn btn-ghost" onclick="goTo(3)">← Back</button>
+            <button class="btn btn-primary" id="next-4" onclick="goTo(5)" disabled>Next: Cockpit →</button>
+        </div>
+    </div>
+
+    <!-- Step 5: Cockpit -->
+    <div class="step" id="step-5">
+        <div class="step-title">Choose Your Cockpit</div>
+        <div class="step-sub">Handlebars, stem, and seatpost. Prices shown relative to the standard build.</div>
+        <div class="cards" id="ck-cards"></div>
+        <div class="nav">
+            <button class="btn btn-ghost" onclick="goTo(4)">← Back</button>
+            <button class="btn btn-primary" id="next-5" onclick="goTo(6)" disabled>See My Build →</button>
+        </div>
+    </div>
+
+    <!-- Step 6: Summary + CTAs -->
+    <div class="step" id="step-6">
+        <div class="step-title">Your Build</div>
+        <div class="step-sub">Here's everything in your custom Celilo</div>
+
+        <div class="summary-card" id="summary-card"><!-- JS renders here --></div>
+
+        <div class="cta-section">
+
+            <button class="btn-reserve" id="btn-reserve" onclick="fillDepositForm()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                Fill My Build Info Into the Deposit Form →
+            </button>
+
+            <div class="sent-confirm" id="deposit-confirm">
+                <strong>✓ Build info filled in!</strong><br>
+                Scroll down to the deposit form. Your build details are already there. Just add your name and email to place your deposit.
+            </div>
+
+            <div class="divider">or</div>
+
+            <button class="btn-custom" id="btn-custom" onclick="sendToContactForm()">
+                Have Questions or Want to Go Custom? →
+            </button>
+
+            <div class="sent-confirm" id="sent-confirm">
+                <strong>✓ Your build summary is ready below.</strong><br>
+                Scroll down to our contact form. It's already filled in with your build details. Just add your name, email, and any questions.
+            </div>
+
+            <div class="restart-wrap">
+                <button class="btn-restart" onclick="startOver()">← Start Over</button>
+            </div>
+
+        </div>
+    </div>
+
+</div><!-- /.app -->
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+//  CELILO CYCLES | BIKE CONFIGURATOR
+//  ─────────────────────────────────
+//  HOW TO EDIT:
+//
+//  FRAMES - fill in drivetrain packages and Hookset fork packages
+//  with real names, descriptions, and prices when ready.
+//
+//  Each option needs:
+//    id          - unique string
+//    name        - display name
+//    description - one-line description of what's included
+//    price       - integer in USD (e.g. 1200), or null for "TBD"
+//    isDefault   - true for the middle/standard option (only one per array)
+//    popular     - true to show a "Popular" badge (optional)
+//
+//  FIXED is the base price: $4,000 frame + $250 (tires, headset, BB).
+//  Everything else is added on top.
+// ═══════════════════════════════════════════════════════════════════
+
+const FIXED = 4250; // $4,000 frame + $250 (tires, Cane Creek headset & BB)
+
+// ─── SHARED OPTIONS ───────────────────────────────────────────────
+// WHEELS and COCKPIT are shared by Redd & Anadromous.
+// Hookset uses HOOKSET_WHEELS (Serpentine instead of Astral, no Berd/Talon).
+// Fork and drivetrain are always frame-specific (see FRAMES below).
+// ──────────────────────────────────────────────────────────────────
+
+const WHEELS = [
+    {
+        id:          'wh-alloy-wi',
+        name:        'Astral Alloy / White Industries',
+        description: 'Astral alloy rims laced to White Industries hubs',
+        price:       1000,
+        isDefault:   false,
+        popular:     false,
+    },
+    {
+        id:          'wh-carbon-wi',
+        name:        'Astral Carbon / White Industries',
+        description: 'Astral carbon rims laced to White Industries hubs',
+        price:       2000,
+        isDefault:   true,   // ← Standard / default option
+        popular:     false,
+    },
+    {
+        id:          'wh-berd-talon',
+        name:        'Berd Carbon / Talon Hubs',
+        description: 'Berd carbon spoke rims with Talon hubs',
+        price:       2000,
+        isDefault:   false,
+        popular:     false,
+    },
+    {
+        id:          'wh-berd-onyx',
+        name:        'Berd Carbon / Onyx Silent',
+        description: 'Berd carbon spoke rims with Onyx silent hubs, buttery quiet',
+        price:       2200,
+        isDefault:   false,
+        popular:     true,
+    },
+];
+
+// Hookset-specific wheels (Serpentine rims, no Berd/Talon option)
+const HOOKSET_WHEELS = [
+    {
+        id:          'hwh-alloy-wi',
+        name:        'Serpentine Alloy / White Industries',
+        description: 'Serpentine alloy rims laced to White Industries hubs',
+        price:       1000,
+        isDefault:   false,
+        popular:     false,
+    },
+    {
+        id:          'hwh-carbon-wi',
+        name:        'Serpentine Carbon / White Industries',
+        description: 'Serpentine carbon rims laced to White Industries hubs',
+        price:       2000,
+        isDefault:   true,   // ← Standard / default option
+        popular:     false,
+    },
+    {
+        id:          'hwh-berd-onyx',
+        name:        'Berd Carbon / Onyx Silent',
+        description: 'Berd carbon spoke rims with Onyx silent hubs, buttery quiet',
+        price:       2200,
+        isDefault:   false,
+        popular:     true,
+    },
+];
+
+const COCKPIT = [
+    {
+        id:          'ck-fixed',
+        name:        'Thomson Elite / Fixed Post',
+        description: 'Thomson Elite stem, bars of your choice, Thomson Elite fixed seatpost',
+        price:       420,
+        isDefault:   false,
+        popular:     false,
+    },
+    {
+        id:          'ck-dropper',
+        name:        'Thomson Elite / Dropper Post',
+        description: 'Thomson Elite stem, bars of your choice, dropper seatpost',
+        price:       520,
+        isDefault:   true,   // ← Standard / default option
+        popular:     false,
+    },
+];
+
+// ─── RIGID FORK OPTIONS (Redd + Anadromous) ───────────────────────
+const RIGID_FORKS = [
+    {
+        id:          'fork-celilo-carbon',
+        name:        'Celilo Carbon Fork',
+        description: 'Celilo-built carbon rigid fork. Lightweight and responsive.',
+        price:       300,
+        isDefault:   false,
+        popular:     false,
+    },
+    {
+        id:          'fork-enve',
+        name:        'ENVE Adventure Fork',
+        description: 'ENVE carbon adventure rigid fork. Stiff, light, refined.',
+        price:       500,
+        isDefault:   true,   // ← Standard / default option
+        popular:     false,
+    },
+    {
+        id:          'fork-wood-composite',
+        name:        'Celilo Wood / Composite Fork',
+        description: 'Handcrafted wood and composite rigid fork. One of a kind.',
+        price:       750,
+        isDefault:   false,
+        popular:     false,
+    },
+    {
+        id:          'fork-cane-creek-invert',
+        name:        'Cane Creek Invert',
+        description: 'Cane Creek Invert suspension-corrected fork',
+        price:       1000,
+        isDefault:   false,
+        popular:     false,
+    },
+];
+
+// ─── FRAME DATA ───────────────────────────────────────────────────
+const FRAMES = [
+    {
+        id:          'redd',
+        name:        'Redd',
+        type:        'Gravel',
+        description: 'Our wood-composite gravel frame, optimized for comfort and stability on rough terrain. Set it up as a sleek gravel racer, a bikepacking rig, or a stylish commuter.',
+
+        forks: RIGID_FORKS,
+
+        drivetrain: [
+            {
+                id:          'redd-dt-grx-mech',
+                name:        'Shimano GRX 820 Mechanical',
+                description: 'GRX 820 mechanical groupset. White Industries crankset & chainring included.',
+                price:       1340,
+                isDefault:   false,
+                popular:     false,
+            },
+            {
+                id:          'redd-dt-grx-di2',
+                name:        'Shimano GRX 820 Di2',
+                description: 'GRX 820 electronic groupset. White Industries crankset & chainring included.',
+                price:       2463.17,
+                isDefault:   true,   // ← Standard / default option
+                popular:     true,
+            },
+            {
+                id:          'redd-dt-red-axs',
+                name:        'SRAM RED AXS',
+                description: 'SRAM RED eTap AXS wireless electronic groupset. White Industries crankset & chainring included.',
+                price:       2695.62,
+                isDefault:   false,
+                popular:     false,
+            },
+        ],
+
+        wheels:   WHEELS,
+        cockpit:  COCKPIT,
+    },
+
+    {
+        id:          'hookset',
+        name:        'Hookset',
+        type:        'Hardtail MTB',
+        description: 'Wood dampens vibration and carbon delivers stiffness where it counts. Built for marathon rides and alpine singletrack, lab tested to ISO standards and field tested by thrashers from Bend to Yuma.',
+
+        forks: [
+            {
+                id:          'hookset-fork-sid-select',
+                name:        'RockShox SID Select',
+                description: 'RockShox SID Select suspension fork. Light cross-country trail performance.',
+                price:       650,
+                isDefault:   false,
+                popular:     false,
+            },
+            {
+                id:          'hookset-fork-fox34',
+                name:        'Fox 34 Factory SL',
+                description: 'Fox 34 Factory SL suspension fork. Refined damping, trail-ready.',
+                price:       900,
+                isDefault:   true,   // ← Standard / default option
+                popular:     false,
+            },
+            {
+                id:          'hookset-fork-sid-ultimate',
+                name:        'RockShox SID Ultimate',
+                description: 'RockShox SID Ultimate suspension fork. Top-spec XC/trail performance.',
+                price:       900,
+                isDefault:   false,
+                popular:     false,
+            },
+            {
+                id:          'hookset-fork-ohlins',
+                name:        'Öhlins RXF34 m.2',
+                description: 'Öhlins RXF34 m.2 suspension fork. Swedish precision, supremely smooth.',
+                price:       1000,
+                isDefault:   false,
+                popular:     true,
+            },
+        ],
+
+        drivetrain: [
+            {
+                id:          'hookset-dt-xo1-mech',
+                name:        'SRAM XO1 Eagle / Maven Base',
+                description: 'SRAM XO1 Eagle 12-speed mechanical, Maven Base brakes. White Industries crankset & chainring included.',
+                price:       1100,
+                isDefault:   false,
+                popular:     false,
+            },
+            {
+                id:          'hookset-dt-xt-di2',
+                name:        'Shimano XT Di2 / XT Brakes',
+                description: 'Shimano XT Di2 12-speed electronic, XT quad-piston brakes. White Industries crankset & chainring included.',
+                price:       1100,
+                isDefault:   false,
+                popular:     false,
+            },
+            {
+                id:          'hookset-dt-xtr-di2',
+                name:        'Shimano XTR Di2 / XTR Brakes',
+                description: 'Shimano XTR Di2 12-speed electronic, XTR quad-piston brakes. White Industries crankset & chainring included.',
+                price:       1500,
+                isDefault:   true,   // ← Standard / default option
+                popular:     false,
+            },
+            {
+                id:          'hookset-dt-xo-axs',
+                name:        'SRAM XO AXS / Maven Silver',
+                description: 'SRAM XO eTap AXS wireless 12-speed, Maven Silver brakes. White Industries crankset & chainring included.',
+                price:       1800,
+                isDefault:   false,
+                popular:     false,
+            },
+            {
+                id:          'hookset-dt-xx-axs',
+                name:        'SRAM XX AXS / Maven Ultimate',
+                description: 'SRAM XX eTap AXS wireless 12-speed, Maven Ultimate brakes. White Industries crankset & chainring included.',
+                price:       2300,
+                isDefault:   false,
+                popular:     true,
+            },
+        ],
+
+        wheels:   HOOKSET_WHEELS,
+        cockpit:  COCKPIT,
+    },
+
+    {
+        id:          'anadromous',
+        name:        'Anadromous',
+        type:        'Drop Bar MTB / Monstercross / ATB',
+        description: 'Drop-bar capability meets trail-ready geometry. The Anadromous does it all: monstercross, bikepacking, all-terrain riding wherever the road ends and the adventure begins.',
+
+        forks: RIGID_FORKS,
+
+        drivetrain: [
+            {
+                id:          'ana-dt-grx-mech',
+                name:        'Shimano GRX 820 Mechanical',
+                description: 'GRX 820 mechanical groupset. White Industries crankset & chainring included.',
+                price:       1340,
+                isDefault:   false,
+                popular:     false,
+            },
+            {
+                id:          'ana-dt-xo-di2',
+                name:        'SRAM XO Di2',
+                description: 'SRAM XO Di2 electronic groupset. White Industries crankset & chainring included.',
+                price:       2463.17,
+                isDefault:   true,   // ← Standard / default option
+                popular:     true,
+            },
+            {
+                id:          'ana-dt-xo-axs',
+                name:        'SRAM XO AXS',
+                description: 'SRAM XO eTap AXS wireless electronic groupset. White Industries crankset & chainring included.',
+                price:       2695.62,
+                isDefault:   false,
+                popular:     false,
+            },
+        ],
+
+        wheels:   WHEELS,
+        cockpit:  COCKPIT,
+    },
+];
+
+// ═══════════════════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════════════════
+const S = {
+    step:      1,
+    frameId:   null,
+    forkId:    null,
+    dtId:      null,
+    wheelsId:  null,
+    ckId:      null,
+};
+
+// ═══════════════════════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════════════════════
+function frame()  { return FRAMES.find(f => f.id === S.frameId); }
+function fork()   { return frame()?.forks.find(x => x.id === S.forkId); }
+function dt()     { return frame()?.drivetrain.find(x => x.id === S.dtId); }
+function wheels() { return frame()?.wheels.find(x => x.id === S.wheelsId); }
+function ck()     { return frame()?.cockpit.find(x => x.id === S.ckId); }
+
+function defaultOf(arr) {
+    return arr.find(o => o.isDefault) || arr[0];
+}
+
+// Minimum possible build price for a frame - uses cheapest non-null option per category.
+// Returns { price, tbd } where tbd is an array of category names still awaiting pricing.
+function minBuild(f) {
+    const cats = [
+        { name: 'drivetrain', arr: f.drivetrain },
+        { name: 'fork',       arr: f.forks      },
+        { name: 'wheels',     arr: f.wheels      },
+        { name: 'cockpit',    arr: f.cockpit     },
+    ];
+    let price = FIXED;
+    const tbd = [];
+    for (const cat of cats) {
+        const prices = cat.arr.map(o => o.price).filter(p => p !== null && p !== undefined);
+        if (prices.length > 0) {
+            price += Math.min(...prices);
+        } else {
+            tbd.push(cat.name);
+        }
+    }
+    return { price, tbd };
+}
+
+// Delta from the default option in an array
+function delta(arr, option) {
+    const def = defaultOf(arr);
+    if (option.price === null || def.price === null) return null;
+    return option.price - def.price;
+}
+
+function fmtDelta(d) {
+    if (d === null) return '<span class="delta-standard">TBD</span>';
+    const r = Math.round(d);
+    if (r === 0)  return '<span class="delta-standard">Standard</span>';
+    if (r > 0)    return `<span class="delta-up">+$${r.toLocaleString()}</span>`;
+    return            `<span class="delta-down">−$${Math.abs(r).toLocaleString()}</span>`;
+}
+
+function fmt(p) {
+    if (p === null || p === undefined) return 'TBD';
+    return '$' + Math.round(p).toLocaleString();
+}
+
+function calcTotal() {
+    const parts = [
+        FIXED,
+        fork()?.price,
+        dt()?.price,
+        wheels()?.price,
+        ck()?.price,
+    ];
+    const hasTBD = parts.some(p => p === null || p === undefined);
+    const sum    = parts.reduce((a, b) => a + (b ?? 0), 0);
+    return { sum, hasTBD };
+}
+
+function buildText() {
+    const f  = frame(), fk = fork(), d = dt(), w = wheels(), c = ck();
+    const { sum, hasTBD } = calcTotal();
+    return [
+        'CELILO CYCLES | BUILD SUMMARY',
+        '',
+        `Frame:      ${f?.name} (${f?.type})`,
+        `Fork:       ${fk?.name}  ${fk?.price !== null ? fmt(fk.price) : '(TBD)'}`,
+        `Drivetrain: ${d?.name}  ${d?.price !== null ? fmt(d.price) : '(TBD)'}`,
+        `Wheels:     ${w?.name}  ${w?.price !== null ? fmt(w.price) : '(TBD)'}`,
+        `Cockpit:    ${c?.name}  ${c?.price !== null ? fmt(c.price) : '(TBD)'}`,
+        `Fixed:      Cane Creek BB & Headset + Tires/Grips/Saddle allowance  $250`,
+        '',
+        `Estimated Total: ${hasTBD ? 'From ' + fmt(sum) + ' (drivetrain TBD)' : fmt(sum)}`,
+    ].join('\n');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  RUNNING TOTAL
+// ═══════════════════════════════════════════════════════════════════
+function updateRunningTotal() {
+    const el     = document.getElementById('running-total');
+    const amount = document.getElementById('rt-amount');
+    const note   = document.getElementById('rt-note');
+
+    if (!S.frameId || S.step === 6) {
+        el.classList.remove('visible');
+        return;
+    }
+
+    const { sum, hasTBD } = calcTotal();
+    el.classList.add('visible');
+    amount.textContent = fmt(sum) + (hasTBD ? '+' : '');
+    note.textContent   = hasTBD ? 'Drivetrain pricing TBD' : 'Estimated. Adjust as you go.';
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  RENDER
+// ═══════════════════════════════════════════════════════════════════
+function renderFrames() {
+    document.getElementById('frame-cards').innerHTML = FRAMES.map(f => `
+        <div class="card ${S.frameId === f.id ? 'selected' : ''}" onclick="pickFrame('${f.id}')">
+            <div class="radio"><div class="radio-dot"></div></div>
+            <div class="card-body">
+                <div class="card-type">${f.type}</div>
+                <div class="card-name">${f.name}</div>
+                <div class="card-desc">${f.description}</div>
+                <div class="card-base">${(({ price, tbd }) =>
+                    tbd.length > 0
+                        ? 'Builds start at ' + fmt(price) + ' + ' + tbd.join(' & ')
+                        : 'Builds start at ' + fmt(price)
+                )(minBuild(f))}</div>
+            </div>
+        </div>
+    `).join('');
+    document.getElementById('next-1').disabled = !S.frameId;
+}
+
+function renderOptions(containerId, arr, selectedId, onPickFn) {
+    const defPrice = defaultOf(arr)?.price ?? null;
+
+    document.getElementById(containerId).innerHTML = arr.map(o => {
+        const d = delta(arr, o);
+        const isDefault = o.isDefault;
+        return `
+            <div class="card ${selectedId === o.id ? 'selected' : ''} ${isDefault ? 'is-default' : ''}"
+                 onclick="${onPickFn}('${o.id}')">
+                ${isDefault   ? '<div class="tag tag-default">Standard</div>' : ''}
+                ${o.popular && !isDefault ? '<div class="tag tag-popular">Popular</div>' : ''}
+                <div class="radio"><div class="radio-dot"></div></div>
+                <div class="card-body">
+                    <div class="card-name">${o.name}</div>
+                    <div class="card-desc">${o.description}</div>
+                    <div class="card-delta">${fmtDelta(d)}</div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function renderSummary() {
+    const f = frame(), fk = fork(), d = dt(), w = wheels(), c = ck();
+    const { sum, hasTBD } = calcTotal();
+
+    const rows = [
+        { label: 'Frame',      val: f.name,  sub: f.type         },
+        { label: 'Fork',       val: fk.name, sub: fk.description },
+        { label: 'Drivetrain', val: d.name,  sub: d.description  },
+        { label: 'Wheels',     val: w.name,  sub: w.description  },
+        { label: 'Cockpit',    val: c.name,  sub: c.description  },
+    ];
+
+    document.getElementById('summary-card').innerHTML = `
+        <div class="summary-head">
+            <div class="summary-head-title">Your Celilo ${f.name}</div>
+        </div>
+        ${rows.map(r => `
+            <div class="summary-row">
+                <div>
+                    <div class="sr-label">${r.label}</div>
+                    <div class="sr-value">${r.val}</div>
+                    <div class="sr-sub">${r.sub}</div>
+                </div>
+            </div>
+        `).join('')}
+        <div class="summary-included">
+            <div class="si-label">✓ Included in every build</div>
+            <div class="si-items">Cane Creek Bottom Bracket &amp; Headset · White Industries Crankset &amp; Chainring</div>
+        </div>
+        <div class="summary-note">Tires, grips / bar tape, and saddle will be confirmed with you before we start building.</div>
+        <div class="total-row">
+            <div class="total-label">Estimated Total</div>
+            <div class="total-amount">${hasTBD ? 'From ' + fmt(sum) : fmt(sum)}</div>
+        </div>
+    `;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  PICK HANDLERS
+// ═══════════════════════════════════════════════════════════════════
+function pickFrame(id) {
+    S.frameId = id;
+    const f = FRAMES.find(fr => fr.id === id);
+
+    // Auto-select the default option for every category
+    S.forkId   = defaultOf(f.forks).id;
+    S.dtId     = defaultOf(f.drivetrain).id;
+    S.wheelsId = defaultOf(f.wheels).id;
+    S.ckId     = defaultOf(f.cockpit).id;
+
+    renderFrames();
+    updateRunningTotal();
+    document.getElementById('next-1').disabled = false;
+}
+
+function pickFork(id) {
+    S.forkId = id;
+    renderOptions('fork-cards', frame().forks, S.forkId, 'pickFork');
+    updateRunningTotal();
+    document.getElementById('next-2').disabled = false;
+}
+
+function pickDt(id) {
+    S.dtId = id;
+    renderOptions('dt-cards', frame().drivetrain, S.dtId, 'pickDt');
+    updateRunningTotal();
+    document.getElementById('next-3').disabled = false;
+}
+
+function pickWheels(id) {
+    S.wheelsId = id;
+    renderOptions('wheels-cards', frame().wheels, S.wheelsId, 'pickWheels');
+    updateRunningTotal();
+    document.getElementById('next-4').disabled = false;
+}
+
+function pickCk(id) {
+    S.ckId = id;
+    renderOptions('ck-cards', frame().cockpit, S.ckId, 'pickCk');
+    updateRunningTotal();
+    document.getElementById('next-5').disabled = false;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════════════════════════
+function goTo(step) {
+    if (step === 2 && !S.frameId)  return;
+    if (step === 3 && !S.forkId)   return;
+    if (step === 4 && !S.dtId)     return;
+    if (step === 5 && !S.wheelsId) return;
+    if (step === 6 && !S.ckId)     return;
+
+    document.getElementById(`step-${S.step}`).classList.remove('active');
+    S.step = step;
+    document.getElementById(`step-${step}`).classList.add('active');
+
+    if (step === 2) {
+        document.getElementById('fork-sub').textContent = `Fork options for the ${frame().name}`;
+        renderOptions('fork-cards', frame().forks, S.forkId, 'pickFork');
+        document.getElementById('next-2').disabled = !S.forkId;
+    }
+    if (step === 3) {
+        renderOptions('dt-cards', frame().drivetrain, S.dtId, 'pickDt');
+        document.getElementById('next-3').disabled = !S.dtId;
+    }
+    if (step === 4) {
+        renderOptions('wheels-cards', frame().wheels, S.wheelsId, 'pickWheels');
+        document.getElementById('next-4').disabled = !S.wheelsId;
+    }
+    if (step === 5) {
+        renderOptions('ck-cards', frame().cockpit, S.ckId, 'pickCk');
+        document.getElementById('next-5').disabled = !S.ckId;
+    }
+    if (step === 6) renderSummary();
+
+    updateRunningTotal();
+    updateProgress();
+    notifyHeight();
+    scrollParentToTop();
+}
+
+function updateProgress() {
+    for (let i = 1; i <= 6; i++) {
+        const dot = document.getElementById(`pd-${i}`);
+        dot.classList.remove('active', 'done');
+        if      (i < S.step)   { dot.classList.add('done');   dot.textContent = '✓'; }
+        else if (i === S.step) { dot.classList.add('active'); dot.textContent = i; }
+        else                   { dot.textContent = i; }
+    }
+    for (let i = 1; i <= 5; i++) {
+        document.getElementById(`pl-${i}`).classList.toggle('done', i < S.step);
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  CTA ACTIONS
+// ═══════════════════════════════════════════════════════════════════
+function fillDepositForm() {
+    window.parent.postMessage({
+        type:         'celilo-build-deposit',
+        buildSummary: buildText(),
+        frameName:    frame()?.name,
+    }, '*');
+
+    const btn = document.getElementById('btn-reserve');
+    btn.innerHTML = '✓ Build Info Filled In. Scroll Down to Complete.';
+    btn.style.background = 'var(--green)';
+    btn.disabled = true;
+    document.getElementById('deposit-confirm').classList.add('visible');
+}
+
+function sendToContactForm() {
+    window.parent.postMessage({
+        type:         'celilo-build-inquiry',
+        buildSummary: buildText(),
+        frameName:    frame()?.name,
+    }, '*');
+
+    const btn = document.getElementById('btn-custom');
+    btn.textContent = '✓ Build Summary Sent to Contact Form';
+    btn.style.borderColor = 'var(--green)';
+    btn.style.color = 'var(--green)';
+    btn.disabled = true;
+    document.getElementById('sent-confirm').classList.add('visible');
+}
+
+function startOver() {
+    S.step = 1; S.frameId = null; S.forkId = null;
+    S.dtId = null; S.wheelsId = null; S.ckId = null;
+
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.getElementById('step-1').classList.add('active');
+
+    const dep = document.getElementById('btn-reserve');
+    dep.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> Fill My Build Info Into the Deposit Form →';
+    dep.style.background = ''; dep.disabled = false;
+    document.getElementById('deposit-confirm').classList.remove('visible');
+
+    const inq = document.getElementById('btn-custom');
+    inq.textContent = 'Have Questions or Want to Go Custom? →';
+    inq.style.borderColor = ''; inq.style.color = ''; inq.disabled = false;
+    document.getElementById('sent-confirm').classList.remove('visible');
+
+    renderFrames();
+    updateProgress();
+    updateRunningTotal();
+    notifyHeight();
+    scrollParentToTop();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  IFRAME AUTO-RESIZE
+//  Posts the document height to the parent Carrd page so the bridge
+//  script can resize the iframe to fit the content exactly.
+// ═══════════════════════════════════════════════════════════════════
+var _resizeTimer;
+function notifyHeight() {
+    clearTimeout(_resizeTimer);
+    _resizeTimer = setTimeout(function () {
+        window.parent.postMessage({
+            type:   'celilo-resize',
+            height: document.body.scrollHeight,
+        }, '*');
+    }, 40); // small debounce so rapid renders don't spam the parent
+}
+
+function scrollParentToTop() {
+    // Ask the parent page to scroll so the top of the configurator is visible
+    window.parent.postMessage({ type: 'celilo-scroll-top' }, '*');
+}
+
+// Watch for any size changes (e.g. card expansion, image load)
+if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(notifyHeight).observe(document.body);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════════════════
+renderFrames();
+notifyHeight();
+</script>
+</body>
+</html>
