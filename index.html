@@ -9,11 +9,11 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --bg:             #ffffff;
-            --surface:        #f7f7f5;
-            --surface-raised: #eeeee9;
-            --border:         #d9d9d4;
-            --border-hover:   #b0b0a8;
+            --bg:             transparent;
+            --surface:        rgba(255,255,255,0.85);
+            --surface-raised: rgba(240,240,236,0.9);
+            --border:         rgba(0,0,0,0.08);
+            --border-hover:   rgba(0,0,0,0.18);
             --accent:         #bf7a3a;
             --accent-hover:   #a86a2e;
             --accent-dim:     rgba(191,122,58,0.08);
@@ -25,6 +25,8 @@
             --blue:           #5469d4;
             --blue-hover:     #4558c0;
             --blue-dim:       rgba(84,105,212,0.08);
+            --shadow:         0 1px 3px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-lg:      0 2px 6px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.05);
             --r:              8px;
             --r-lg:           14px;
         }
@@ -35,7 +37,7 @@
             font-family: 'Figtree', sans-serif;
             font-size: 15px;
             line-height: 1.6;
-            overflow-x: hidden; /* hide horizontal scroll; vertical scroll available as fallback before iframe auto-resize kicks in */
+            overflow: hidden; /* no scrolling inside the iframe; parent page handles all scrolling */
         }
 
         .app {
@@ -102,6 +104,7 @@
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: var(--r);
+            box-shadow: var(--shadow);
             padding: 10px 16px;
             margin-bottom: 18px;
             justify-content: space-between;
@@ -149,16 +152,17 @@
             background: var(--surface);
             border: 2px solid var(--border);
             border-radius: var(--r-lg);
+            box-shadow: var(--shadow);
             padding: 12px 16px;
             cursor: pointer;
-            transition: border-color 0.15s, background 0.15s;
+            transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
             display: flex;
             align-items: flex-start;
             gap: 13px;
             position: relative;
         }
-        .card:hover    { border-color: var(--border-hover); }
-        .card.selected { border-color: var(--accent); background: var(--accent-dim); }
+        .card:hover    { border-color: var(--border-hover); box-shadow: var(--shadow-lg); }
+        .card.selected { border-color: var(--accent); background: var(--accent-dim); box-shadow: 0 0 0 1px rgba(191,122,58,0.15), var(--shadow-lg); }
         .card.is-default { }
 
         .radio {
@@ -216,21 +220,23 @@
             cursor: pointer; border: none;
             transition: all 0.15s; letter-spacing: 0.01em;
         }
-        .btn-primary { background: var(--accent); color: #fff; flex: 1; }
-        .btn-primary:hover    { background: var(--accent-hover); }
-        .btn-primary:disabled { background: var(--surface-raised); color: var(--text-muted); cursor: not-allowed; }
+        .btn-primary { background: var(--accent); color: #fff; flex: 1; box-shadow: var(--shadow); }
+        .btn-primary:hover    { background: var(--accent-hover); box-shadow: var(--shadow-lg); }
+        .btn-primary:disabled { background: var(--surface-raised); color: var(--text-muted); cursor: not-allowed; box-shadow: none; }
         .btn-ghost {
-            background: transparent;
+            background: var(--surface);
             color: var(--text-secondary);
             border: 1px solid var(--border);
+            box-shadow: var(--shadow);
         }
-        .btn-ghost:hover { border-color: var(--border-hover); color: var(--text-primary); }
+        .btn-ghost:hover { border-color: var(--border-hover); color: var(--text-primary); box-shadow: var(--shadow-lg); }
 
         /* ── Summary ── */
         .summary-card {
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: var(--r-lg);
+            box-shadow: var(--shadow-lg);
             overflow: hidden;
             margin-bottom: 18px;
         }
@@ -292,9 +298,10 @@
             display: flex; align-items: center; justify-content: center; gap: 8px;
             width: 100%; cursor: pointer; border: none;
             font-family: 'Figtree', sans-serif; font-weight: 700;
-            transition: background 0.15s;
+            transition: background 0.15s, box-shadow 0.15s;
+            box-shadow: var(--shadow);
         }
-        .btn-reserve:hover { background: var(--blue-hover); }
+        .btn-reserve:hover { background: var(--blue-hover); box-shadow: var(--shadow-lg); }
         .divider { text-align: center; font-size: 12px; color: var(--text-muted); }
         .btn-custom {
             background: var(--surface-raised); color: var(--text-primary);
@@ -303,16 +310,18 @@
             border-radius: var(--r);
             width: 100%; cursor: pointer;
             font-family: 'Figtree', sans-serif; font-weight: 700;
-            transition: border-color 0.15s;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            box-shadow: var(--shadow);
         }
-        .btn-custom:hover { border-color: var(--border-hover); }
+        .btn-custom:hover { border-color: var(--border-hover); box-shadow: var(--shadow-lg); }
 
         /* ── Sent confirmation ── */
         .sent-confirm {
             display: none;
-            background: var(--green-dim);
-            border: 1px solid rgba(61,122,58,0.25);
+            background: rgba(61,122,58,0.06);
+            border: 1px solid rgba(61,122,58,0.2);
             border-radius: var(--r);
+            box-shadow: var(--shadow);
             padding: 12px 16px;
             font-size: 12px; color: var(--text-secondary);
             line-height: 1.55; text-align: center;
@@ -1035,10 +1044,10 @@ function renderSummary() {
             </div>
         `).join('')}
         <div class="summary-included">
-            <div class="si-label">✓ Included in every build</div>
+            <div class="si-label">✓ Standard on every build</div>
             <div class="si-items">Cane Creek Bottom Bracket &amp; Headset · White Industries Crankset &amp; Chainring</div>
         </div>
-        <div class="summary-note">Tires, grips / bar tape, and saddle will be confirmed with you before we start building.</div>
+        <div class="summary-note">Tires, grips / bar tape, saddle, frame color, custom color schemes, anodization, and inlays will be confirmed with you before we start building.</div>
         <div class="total-row">
             <div class="total-label">Estimated Total</div>
             <div class="total-amount">${hasTBD ? 'From ' + fmt(sum) : fmt(sum)}</div>
@@ -1152,6 +1161,7 @@ function fillDepositForm() {
         type:         'celilo-build-deposit',
         buildSummary: buildText(),
         frameName:    frame()?.name,
+        scrollTo:     '#form04-build-details',
     }, '*');
 
     const btn = document.getElementById('btn-reserve');
@@ -1166,6 +1176,7 @@ function sendToContactForm() {
         type:         'celilo-build-inquiry',
         buildSummary: buildText(),
         frameName:    frame()?.name,
+        scrollTo:     '#form06-message',
     }, '*');
 
     const btn = document.getElementById('btn-custom');
