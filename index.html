@@ -10,23 +10,26 @@
 
         :root {
             --bg:             transparent;
-            --surface:        rgba(255,255,255,0.94);
-            --surface-raised: rgba(245,244,240,0.96);
-            --border:         rgba(0,0,0,0.12);
-            --border-hover:   rgba(0,0,0,0.24);
-            --accent:         #c47f3e;
-            --accent-hover:   #b06e30;
-            --accent-dim:     rgba(196,127,62,0.12);
-            --text-primary:   #1a1a17;
-            --text-secondary: #555049;
-            --text-muted:     #7a756c;
+            --surface:        rgba(255,255,255,0.95);
+            --surface-raised: rgba(244,244,244,0.97);
+            --border:         rgba(0,0,0,0.10);
+            --border-hover:   rgba(0,0,0,0.22);
+            --accent:         #D4AF37;
+            --accent-hover:   #BF9B2F;
+            --accent-text:    #9E7C1A;
+            --accent-dim:     rgba(212,175,55,0.10);
+            --text-primary:   #1A1A1A;
+            --text-secondary: #4a4a4a;
+            --text-muted:     #767676;
             --green:          #3d7a3a;
-            --green-dim:      rgba(61,122,58,0.1);
+            --green-dim:      rgba(61,122,58,0.08);
+            --wood:           #C19A6B;
+            --walnut:         #3E2723;
             --blue:           #5469d4;
             --blue-hover:     #4558c0;
-            --blue-dim:       rgba(84,105,212,0.1);
-            --shadow:         0 1px 4px rgba(0,0,0,0.12), 0 3px 10px rgba(0,0,0,0.08);
-            --shadow-lg:      0 2px 8px rgba(0,0,0,0.15), 0 6px 20px rgba(0,0,0,0.1);
+            --blue-dim:       rgba(84,105,212,0.08);
+            --shadow:         0 1px 4px rgba(0,0,0,0.14), 0 3px 12px rgba(0,0,0,0.08);
+            --shadow-lg:      0 2px 8px rgba(0,0,0,0.18), 0 6px 24px rgba(0,0,0,0.10);
             --r:              8px;
             --r-lg:           14px;
         }
@@ -54,10 +57,10 @@
             font-weight: 800;
             letter-spacing: -0.02em;
             margin-bottom: 4px;
-            color: #fff;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+            color: #D4AF37;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.35);
         }
-        .header p { color: rgba(255,255,255,0.75); font-size: 13px; text-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        .header p { color: rgba(255,255,255,0.8); font-size: 13px; text-shadow: 0 1px 3px rgba(0,0,0,0.2); }
 
         /* ── Progress ── */
         .progress {
@@ -82,7 +85,7 @@
             color: rgba(255,255,255,0.6);
             transition: all 0.2s;
         }
-        .prog-dot.active { border-color: var(--accent); color: var(--accent); background: rgba(255,255,255,0.9); }
+        .prog-dot.active { border-color: var(--accent); color: #1A1A1A; background: var(--accent); }
         .prog-dot.done   { border-color: var(--green); background: var(--green); color: #fff; }
         .prog-label {
             font-size: 10px;
@@ -167,7 +170,7 @@
             position: relative;
         }
         .card:hover    { border-color: var(--border-hover); box-shadow: var(--shadow-lg); }
-        .card.selected { border-color: var(--accent); background: var(--accent-dim); box-shadow: 0 0 0 1px rgba(196,127,62,0.2), var(--shadow-lg); }
+        .card.selected { border-color: var(--accent); background: var(--accent-dim); box-shadow: 0 0 0 1px rgba(212,175,55,0.18), var(--shadow-lg); }
         .card.is-default { }
 
         .radio {
