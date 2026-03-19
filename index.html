@@ -1238,6 +1238,36 @@ if (typeof ResizeObserver !== 'undefined') {
 }
 
 // ═══════════════════════════════════════════════════════════════════
+//  SCROLL PASSTHROUGH
+//  The iframe must never scroll internally. Forward all wheel and
+//  touch-scroll events to the parent so the Carrd page scrolls.
+// ═══════════════════════════════════════════════════════════════════
+window.addEventListener('wheel', function (e) {
+    window.parent.postMessage({
+        type:   'celilo-scroll',
+        deltaY: e.deltaY,
+        deltaX: e.deltaX,
+    }, '*');
+    e.preventDefault();
+}, { passive: false });
+
+// Touch scrolling passthrough
+var _touchStartY = 0;
+window.addEventListener('touchstart', function (e) {
+    _touchStartY = e.touches[0].clientY;
+}, { passive: true });
+window.addEventListener('touchmove', function (e) {
+    var deltaY = _touchStartY - e.touches[0].clientY;
+    _touchStartY = e.touches[0].clientY;
+    window.parent.postMessage({
+        type:   'celilo-scroll',
+        deltaY: deltaY,
+        deltaX: 0,
+    }, '*');
+    e.preventDefault();
+}, { passive: false });
+
+// ═══════════════════════════════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════════════════════════════
 renderFrames();
