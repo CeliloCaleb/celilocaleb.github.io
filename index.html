@@ -467,6 +467,13 @@
         <div class="step-title">Choose Your Frame</div>
         <div class="step-sub">Every Celilo is handbuilt to order. Pick the platform that fits your riding.</div>
         <div class="cards" id="frame-cards"></div>
+
+        <div id="build-type-section" style="display:none;">
+            <div class="step-title" style="margin-top:16px;">How Do You Want It?</div>
+            <div class="step-sub">Choose a complete build or just the frame.</div>
+            <div class="cards" id="build-type-cards"></div>
+        </div>
+
         <div class="nav">
             <button class="btn btn-primary" id="next-1" onclick="goTo(2)" disabled>Next: Fork →</button>
         </div>
@@ -520,6 +527,10 @@
     <div class="step" id="step-6">
         <div class="step-title">Your Build</div>
         <div class="step-sub">Here's everything in your custom Celilo</div>
+
+        <div style="margin-bottom: 14px;">
+            <button class="btn btn-ghost" id="back-6" onclick="goTo(5)">← Back</button>
+        </div>
 
         <div class="summary-card" id="summary-card"><!-- JS renders here --></div>
 
@@ -612,7 +623,7 @@ const WHEELS = [
     {
         id:          'wh-berd-onyx',
         name:        'Berd Carbon / Onyx Silent',
-        description: 'Berd carbon spoke rims with Onyx silent hubs, buttery quiet',
+        description: 'Berd carbon spoke rims with Onyx silent hubs, silent',
         price:       2200,
         isDefault:   false,
         popular:     true,
@@ -640,7 +651,7 @@ const HOOKSET_WHEELS = [
     {
         id:          'hwh-berd-onyx',
         name:        'Berd Carbon / Onyx Silent',
-        description: 'Berd carbon spoke rims with Onyx silent hubs, buttery quiet',
+        description: 'Berd carbon spoke rims with Onyx silent hubs, silent',
         price:       2200,
         isDefault:   false,
         popular:     true,
@@ -662,6 +673,14 @@ const COCKPIT = [
         description: 'Thomson Elite stem, bars of your choice, dropper seatpost',
         price:       520,
         isDefault:   true,   // ← Standard / default option
+        popular:     false,
+    },
+    {
+        id:          'ck-dropper-wireless',
+        name:        'Thomson Elite / RockShox Reverb AXS',
+        description: 'Thomson Elite stem, bars of your choice, RockShox Reverb AXS wireless dropper post',
+        price:       720,
+        isDefault:   false,
         popular:     false,
     },
 ];
@@ -703,6 +722,15 @@ const RIGID_FORKS = [
 ];
 
 // ─── FRAME DATA ───────────────────────────────────────────────────
+const NO_FORK = {
+    id:          'fork-none',
+    name:        'No Fork',
+    description: 'Frame only, no fork included.',
+    price:       0,
+    isDefault:   true,
+    popular:     false,
+};
+
 const FRAMES = [
     {
         id:          'redd',
@@ -849,17 +877,17 @@ const FRAMES = [
                 popular:     false,
             },
             {
-                id:          'ana-dt-xo-di2',
-                name:        'SRAM XO Di2',
-                description: 'SRAM XO Di2 electronic groupset. White Industries crankset & chainring included.',
+                id:          'ana-dt-grx-di2',
+                name:        'Shimano GRX 820 Di2',
+                description: 'GRX 820 electronic groupset. White Industries crankset & chainring included.',
                 price:       2463.17,
                 isDefault:   true,   // ← Standard / default option
                 popular:     true,
             },
             {
-                id:          'ana-dt-xo-axs',
-                name:        'SRAM XO AXS',
-                description: 'SRAM XO eTap AXS wireless electronic groupset. White Industries crankset & chainring included.',
+                id:          'ana-dt-red-axs',
+                name:        'SRAM RED AXS',
+                description: 'SRAM RED eTap AXS wireless electronic groupset. White Industries crankset & chainring included.',
                 price:       2695.62,
                 isDefault:   false,
                 popular:     false,
@@ -869,7 +897,10 @@ const FRAMES = [
         wheels:   WHEELS,
         cockpit:  COCKPIT,
     },
+
 ];
+
+const FRAME_PRICE = 4000; // Frame-only price (no tires/headset/BB allowance beyond headset+BB)
 
 // ═══════════════════════════════════════════════════════════════════
 //  STATE
@@ -877,6 +908,7 @@ const FRAMES = [
 const S = {
     step:      1,
     frameId:   null,
+    buildType: null,  // 'full' or 'frame-only'
     forkId:    null,
     dtId:      null,
     wheelsId:  null,
@@ -886,8 +918,14 @@ const S = {
 // ═══════════════════════════════════════════════════════════════════
 //  HELPERS
 // ═══════════════════════════════════════════════════════════════════
-function frame()  { return FRAMES.find(f => f.id === S.frameId); }
-function fork()   { return frame()?.forks.find(x => x.id === S.forkId); }
+function frame()     { return FRAMES.find(f => f.id === S.frameId); }
+function isFrameOnly() { return S.buildType === 'frame-only'; }
+function forkOptions() {
+    var f = frame();
+    if (!f) return [];
+    return isFrameOnly() ? [NO_FORK].concat(f.forks) : f.forks;
+}
+function fork()   { return forkOptions().find(x => x.id === S.forkId); }
 function dt()     { return frame()?.drivetrain.find(x => x.id === S.dtId); }
 function wheels() { return frame()?.wheels.find(x => x.id === S.wheelsId); }
 function ck()     { return frame()?.cockpit.find(x => x.id === S.ckId); }
@@ -952,7 +990,23 @@ function calcTotal() {
 }
 
 function buildText() {
-    const f  = frame(), fk = fork(), d = dt(), w = wheels(), c = ck();
+    const f = frame();
+    if (isFrameOnly()) {
+        const foFk = fork();
+        const foHasFork = foFk && foFk.id !== 'fork-none';
+        const foTotal = FRAME_PRICE + (foHasFork ? foFk.price : 0);
+        const lines = [
+            'CELILO CYCLES | ' + f.name.toUpperCase() + (foHasFork ? ' + FORK' : ' FRAME ONLY'),
+            '',
+            'Frame:    ' + f.name + ' (' + f.type + ')',
+        ];
+        if (foHasFork) lines.push('Fork:     ' + foFk.name + '  ' + fmt(foFk.price));
+        lines.push('Included: Cane Creek BB & Headset');
+        lines.push('');
+        lines.push((foHasFork ? 'Estimated Total: ' : 'Price: ') + fmt(foTotal));
+        return lines.join('\n');
+    }
+    const fk = fork(), d = dt(), w = wheels(), c = ck();
     const { sum, hasTBD } = calcTotal();
     return [
         'CELILO CYCLES | BUILD SUMMARY',
@@ -976,7 +1030,7 @@ function updateRunningTotal() {
     const amount = document.getElementById('rt-amount');
     const note   = document.getElementById('rt-note');
 
-    if (!S.frameId || S.step === 6) {
+    if (!S.frameId || S.step === 6 || isFrameOnly()) {
         el.classList.remove('visible');
         return;
     }
@@ -995,18 +1049,18 @@ function renderFrames() {
         <div class="card ${S.frameId === f.id ? 'selected' : ''}" onclick="pickFrame('${f.id}')">
             <div class="radio"><div class="radio-dot"></div></div>
             <div class="card-body">
-                <div class="card-type">${f.type}</div>
+                ${f.type ? '<div class="card-type">' + f.type + '</div>' : ''}
                 <div class="card-name">${f.name}</div>
                 <div class="card-desc">${f.description}</div>
                 <div class="card-base">${(({ price, tbd }) =>
-                    tbd.length > 0
-                        ? 'Builds start at ' + fmt(price) + ' + ' + tbd.join(' & ')
-                        : 'Builds start at ' + fmt(price)
-                )(minBuild(f))}</div>
+                        tbd.length > 0
+                            ? 'Builds start at ' + fmt(price) + ' + ' + tbd.join(' & ')
+                            : 'Builds start at ' + fmt(price)
+                    )(minBuild(f))}</div>
             </div>
         </div>
     `).join('');
-    document.getElementById('next-1').disabled = !S.frameId;
+    document.getElementById('next-1').disabled = !S.frameId || !S.buildType;
 }
 
 function renderOptions(containerId, arr, selectedId, onPickFn) {
@@ -1033,6 +1087,42 @@ function renderOptions(containerId, arr, selectedId, onPickFn) {
 
 function renderSummary() {
     const f = frame(), fk = fork(), d = dt(), w = wheels(), c = ck();
+
+    if (isFrameOnly()) {
+        var hasFork = fk && fk.id !== 'fork-none';
+        var totalPrice = FRAME_PRICE + (hasFork ? fk.price : 0);
+        document.getElementById('summary-card').innerHTML = `
+            <div class="summary-head">
+                <div class="summary-head-title">Celilo ${f.name}${hasFork ? ' + Fork' : ' Frame Only'}</div>
+            </div>
+            <div class="summary-row">
+                <div>
+                    <div class="sr-label">Frame</div>
+                    <div class="sr-value">${f.name}</div>
+                    <div class="sr-sub">${f.type} - Handbuilt to order in the Pacific Northwest</div>
+                </div>
+            </div>
+            ${hasFork ? `
+            <div class="summary-row">
+                <div>
+                    <div class="sr-label">Fork</div>
+                    <div class="sr-value">${fk.name}</div>
+                    <div class="sr-sub">${fk.description}</div>
+                </div>
+            </div>` : ''}
+            <div class="summary-included">
+                <div class="si-label">✓ Included</div>
+                <div class="si-items">Cane Creek Bottom Bracket &amp; Headset</div>
+            </div>
+            <div class="summary-note">Frame color, custom color schemes, inlays, and other details will be confirmed with you before we start building.</div>
+            <div class="total-row">
+                <div class="total-label">${hasFork ? 'Estimated Total' : 'Frame Price'}</div>
+                <div class="total-amount">${fmt(totalPrice)}</div>
+            </div>
+        `;
+        return;
+    }
+
     const { sum, hasTBD } = calcTotal();
 
     const rows = [
@@ -1073,22 +1163,56 @@ function renderSummary() {
 // ═══════════════════════════════════════════════════════════════════
 function pickFrame(id) {
     S.frameId = id;
-    const f = FRAMES.find(fr => fr.id === id);
+    S.buildType = null;  // reset build type on frame change
 
-    // Auto-select the default option for every category
-    S.forkId   = defaultOf(f.forks).id;
-    S.dtId     = defaultOf(f.drivetrain).id;
-    S.wheelsId = defaultOf(f.wheels).id;
-    S.ckId     = defaultOf(f.cockpit).id;
-
+    // Show build type selector
+    document.getElementById('build-type-section').style.display = 'block';
+    renderBuildType();
     renderFrames();
     updateRunningTotal();
+    document.getElementById('next-1').disabled = true; // need to pick build type too
+    notifyHeight();
+}
+
+function pickBuildType(type) {
+    S.buildType = type;
+    const f = frame();
+
+    if (isFrameOnly()) {
+        S.forkId = defaultOf([NO_FORK].concat(f.forks)).id;
+        S.dtId = null; S.wheelsId = null; S.ckId = null;
+    } else {
+        S.forkId   = defaultOf(f.forks).id;
+        S.dtId     = defaultOf(f.drivetrain).id;
+        S.wheelsId = defaultOf(f.wheels).id;
+        S.ckId     = defaultOf(f.cockpit).id;
+    }
+
+    renderBuildType();
+    updateRunningTotal();
     document.getElementById('next-1').disabled = false;
+    notifyHeight();
+}
+
+function renderBuildType() {
+    const types = [
+        { id: 'full',       name: 'Complete Build',  desc: 'Frame, fork, drivetrain, wheels, and cockpit. Ready to ride.' },
+        { id: 'frame-only', name: 'Frame Only',      desc: 'Just the frame with Cane Creek headset and bottom bracket. Add an optional fork on the next step.' },
+    ];
+    document.getElementById('build-type-cards').innerHTML = types.map(t => `
+        <div class="card ${S.buildType === t.id ? 'selected' : ''}" onclick="pickBuildType('${t.id}')">
+            <div class="radio"><div class="radio-dot"></div></div>
+            <div class="card-body">
+                <div class="card-name">${t.name}</div>
+                <div class="card-desc">${t.desc}</div>
+            </div>
+        </div>
+    `).join('');
 }
 
 function pickFork(id) {
     S.forkId = id;
-    renderOptions('fork-cards', frame().forks, S.forkId, 'pickFork');
+    renderOptions('fork-cards', forkOptions(), S.forkId, 'pickFork');
     updateRunningTotal();
     document.getElementById('next-2').disabled = false;
 }
@@ -1118,19 +1242,34 @@ function pickCk(id) {
 //  NAVIGATION
 // ═══════════════════════════════════════════════════════════════════
 function goTo(step) {
-    if (step === 2 && !S.frameId)  return;
-    if (step === 3 && !S.forkId)   return;
-    if (step === 4 && !S.dtId)     return;
-    if (step === 5 && !S.wheelsId) return;
-    if (step === 6 && !S.ckId)     return;
+    var f = frame();
+    // Frame-only: flow is 1 → 2 → 6 (skip 3, 4, 5)
+    if (isFrameOnly()) {
+        if (step > 2 && step < 6) { step = 6; }               // forward from 2 skips to 6
+        if (step < S.step && S.step === 6) { step = 2; }       // back from 6 goes to 2
+        if (step < S.step && S.step === 2) { step = 1; }       // back from 2 goes to 1
+    }
+
+    if (step === 2 && !S.frameId)    return;
+    if (step === 2 && !S.buildType)  return;
+    if (step === 3 && !S.forkId)     return;
+    if (step === 4 && !S.dtId)       return;
+    if (step === 5 && !S.wheelsId)   return;
+    if (step === 6 && !S.ckId && !isFrameOnly()) return;
 
     document.getElementById(`step-${S.step}`).classList.remove('active');
     S.step = step;
     document.getElementById(`step-${step}`).classList.add('active');
 
     if (step === 2) {
-        document.getElementById('fork-sub').textContent = `Fork options for the ${frame().name}`;
-        renderOptions('fork-cards', frame().forks, S.forkId, 'pickFork');
+        if (isFrameOnly()) {
+            document.getElementById('fork-sub').textContent = 'Add a fork to your ' + f.name + ', or leave "No Fork" selected.';
+            document.getElementById('next-2').textContent = 'See My Build →';
+        } else {
+            document.getElementById('fork-sub').textContent = 'Fork options for the ' + f.name;
+            document.getElementById('next-2').textContent = 'Next: Drivetrain →';
+        }
+        renderOptions('fork-cards', forkOptions(), S.forkId, 'pickFork');
         document.getElementById('next-2').disabled = !S.forkId;
     }
     if (step === 3) {
@@ -1145,7 +1284,15 @@ function goTo(step) {
         renderOptions('ck-cards', frame().cockpit, S.ckId, 'pickCk');
         document.getElementById('next-5').disabled = !S.ckId;
     }
-    if (step === 6) renderSummary();
+    if (step === 6) {
+        renderSummary();
+        var backBtn = document.getElementById('back-6');
+        if (isFrameOnly()) {
+            backBtn.setAttribute('onclick', 'goTo(2)');
+        } else {
+            backBtn.setAttribute('onclick', 'goTo(5)');
+        }
+    }
 
     updateRunningTotal();
     updateProgress();
@@ -1201,11 +1348,12 @@ function sendToContactForm() {
 }
 
 function startOver() {
-    S.step = 1; S.frameId = null; S.forkId = null;
+    S.step = 1; S.frameId = null; S.buildType = null; S.forkId = null;
     S.dtId = null; S.wheelsId = null; S.ckId = null;
 
     document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
     document.getElementById('step-1').classList.add('active');
+    document.getElementById('build-type-section').style.display = 'none';
 
     const dep = document.getElementById('btn-reserve');
     dep.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> Fill My Build Info Into the Deposit Form →';
