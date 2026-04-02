@@ -598,16 +598,16 @@ const FIXED = 4250; // $4,000 frame + $250 (tires, Cane Creek headset & BB)
 const WHEELS = [
     {
         id:          'wh-alloy-wi',
-        name:        'Astral Alloy / White Industries',
-        description: 'Astral alloy rims laced to White Industries hubs',
+        name:        'Astral Wanderlust Alloy / White Industries CLD',
+        description: 'Astral Wanderlust alloy rims laced to White Industries CLD hubs',
         price:       1000,
         isDefault:   false,
         popular:     false,
     },
     {
         id:          'wh-carbon-wi',
-        name:        'Astral Carbon / White Industries',
-        description: 'Astral carbon rims laced to White Industries hubs',
+        name:        'Astral Wanderlust Carbon / White Industries CLD',
+        description: 'Astral Wanderlust carbon rims laced to White Industries CLD hubs',
         price:       2000,
         isDefault:   true,   // ← Standard / default option
         popular:     false,
@@ -615,7 +615,7 @@ const WHEELS = [
     {
         id:          'wh-berd-talon',
         name:        'Berd Carbon / Talon Hubs',
-        description: 'Berd carbon spoke rims with Talon hubs',
+        description: 'Berd carbon spoke wheels laced to Talon hubs',
         price:       2000,
         isDefault:   false,
         popular:     false,
@@ -623,7 +623,7 @@ const WHEELS = [
     {
         id:          'wh-berd-onyx',
         name:        'Berd Carbon / Onyx Silent',
-        description: 'Berd carbon spoke rims with Onyx silent hubs, silent',
+        description: 'Berd carbon spoke wheels with Onyx silent engagement hubs',
         price:       2200,
         isDefault:   false,
         popular:     true,
@@ -634,16 +634,16 @@ const WHEELS = [
 const HOOKSET_WHEELS = [
     {
         id:          'hwh-alloy-wi',
-        name:        'Serpentine Alloy / White Industries',
-        description: 'Serpentine alloy rims laced to White Industries hubs',
+        name:        'Serpentine Alloy / White Industries CLD',
+        description: 'Serpentine alloy rims laced to White Industries CLD hubs',
         price:       1000,
         isDefault:   false,
         popular:     false,
     },
     {
         id:          'hwh-carbon-wi',
-        name:        'Serpentine Carbon / White Industries',
-        description: 'Serpentine carbon rims laced to White Industries hubs',
+        name:        'Serpentine Carbon / White Industries CLD',
+        description: 'Serpentine carbon rims laced to White Industries CLD hubs',
         price:       2000,
         isDefault:   true,   // ← Standard / default option
         popular:     false,
@@ -651,7 +651,7 @@ const HOOKSET_WHEELS = [
     {
         id:          'hwh-berd-onyx',
         name:        'Berd Carbon / Onyx Silent',
-        description: 'Berd carbon spoke rims with Onyx silent hubs, silent',
+        description: 'Berd carbon spoke wheels with Onyx silent engagement hubs',
         price:       2200,
         isDefault:   false,
         popular:     true,
@@ -662,7 +662,7 @@ const COCKPIT = [
     {
         id:          'ck-fixed',
         name:        'Thomson Elite / Fixed Post',
-        description: 'Thomson Elite stem, bars of your choice, Thomson Elite fixed seatpost',
+        description: 'Thomson Elite stem, handlebars of your choice, Thomson Elite fixed seatpost',
         price:       420,
         isDefault:   false,
         popular:     false,
@@ -670,7 +670,7 @@ const COCKPIT = [
     {
         id:          'ck-dropper',
         name:        'Thomson Elite / Dropper Post',
-        description: 'Thomson Elite stem, bars of your choice, dropper seatpost',
+        description: 'Thomson Elite stem, handlebars of your choice, cable-actuated dropper seatpost',
         price:       520,
         isDefault:   true,   // ← Standard / default option
         popular:     false,
@@ -678,7 +678,7 @@ const COCKPIT = [
     {
         id:          'ck-dropper-wireless',
         name:        'Thomson Elite / RockShox Reverb AXS',
-        description: 'Thomson Elite stem, bars of your choice, RockShox Reverb AXS wireless dropper post',
+        description: 'Thomson Elite stem, handlebars of your choice, RockShox Reverb AXS wireless electronic dropper post',
         price:       720,
         isDefault:   false,
         popular:     false,
@@ -690,7 +690,7 @@ const RIGID_FORKS = [
     {
         id:          'fork-celilo-carbon',
         name:        'Celilo Carbon Fork',
-        description: 'Celilo-built carbon rigid fork. Lightweight and responsive.',
+        description: 'Celilo-designed full carbon rigid fork',
         price:       300,
         isDefault:   false,
         popular:     false,
@@ -698,7 +698,7 @@ const RIGID_FORKS = [
     {
         id:          'fork-enve',
         name:        'ENVE Adventure Fork',
-        description: 'ENVE carbon adventure rigid fork. Stiff, light, refined.',
+        description: 'ENVE Adventure carbon rigid fork with triple-boss mounts',
         price:       500,
         isDefault:   true,   // ← Standard / default option
         popular:     false,
@@ -706,7 +706,7 @@ const RIGID_FORKS = [
     {
         id:          'fork-wood-composite',
         name:        'Celilo Wood / Composite Fork',
-        description: 'Handcrafted wood and composite rigid fork. One of a kind.',
+        description: 'Celilo wood and composite rigid fork, handbuilt to match your frame',
         price:       750,
         isDefault:   false,
         popular:     false,
@@ -714,7 +714,7 @@ const RIGID_FORKS = [
     {
         id:          'fork-cane-creek-invert',
         name:        'Cane Creek Invert',
-        description: 'Cane Creek Invert suspension-corrected fork',
+        description: 'Cane Creek Invert inverted-stanchion suspension fork, 40mm travel',
         price:       1000,
         isDefault:   false,
         popular:     false,
@@ -744,7 +744,7 @@ const FRAMES = [
             {
                 id:          'redd-dt-grx-mech',
                 name:        'Shimano GRX 820 Mechanical',
-                description: 'GRX 820 mechanical groupset. White Industries crankset & chainring included.',
+                description: 'GRX 820 mechanical groupset. White Industries crankset and chainring.',
                 price:       1340,
                 isDefault:   false,
                 popular:     false,
@@ -752,7 +752,7 @@ const FRAMES = [
             {
                 id:          'redd-dt-grx-di2',
                 name:        'Shimano GRX 820 Di2',
-                description: 'GRX 820 electronic groupset. White Industries crankset & chainring included.',
+                description: 'GRX 820 electronic groupset. White Industries crankset and chainring.',
                 price:       2463.17,
                 isDefault:   true,   // ← Standard / default option
                 popular:     true,
@@ -760,7 +760,7 @@ const FRAMES = [
             {
                 id:          'redd-dt-red-axs',
                 name:        'SRAM RED AXS',
-                description: 'SRAM RED eTap AXS wireless electronic groupset. White Industries crankset & chainring included.',
+                description: 'SRAM RED eTap AXS wireless electronic groupset. White Industries crankset and chainring.',
                 price:       2695.62,
                 isDefault:   false,
                 popular:     false,
@@ -781,7 +781,7 @@ const FRAMES = [
             {
                 id:          'hookset-fork-sid-select',
                 name:        'RockShox SID Select',
-                description: 'RockShox SID Select suspension fork. Light cross-country trail performance.',
+                description: 'RockShox SID Select, 100-120mm travel, Charger RL damper',
                 price:       650,
                 isDefault:   false,
                 popular:     false,
@@ -789,7 +789,7 @@ const FRAMES = [
             {
                 id:          'hookset-fork-fox34',
                 name:        'Fox 34 Factory SL',
-                description: 'Fox 34 Factory SL suspension fork. Refined damping, trail-ready.',
+                description: 'Fox 34 Factory SL, 100-120mm travel, FIT4 damper, Kashima coated stanchions',
                 price:       900,
                 isDefault:   true,   // ← Standard / default option
                 popular:     false,
@@ -797,7 +797,7 @@ const FRAMES = [
             {
                 id:          'hookset-fork-sid-ultimate',
                 name:        'RockShox SID Ultimate',
-                description: 'RockShox SID Ultimate suspension fork. Top-spec XC/trail performance.',
+                description: 'RockShox SID Ultimate, 100-120mm travel, Charger Race Day damper, carbon crown',
                 price:       900,
                 isDefault:   false,
                 popular:     false,
@@ -805,7 +805,7 @@ const FRAMES = [
             {
                 id:          'hookset-fork-ohlins',
                 name:        'Öhlins RXF34 m.2',
-                description: 'Öhlins RXF34 m.2 suspension fork. Swedish precision, supremely smooth.',
+                description: 'Öhlins RXF34 m.2, 100-120mm travel, TTX22m cartridge damper',
                 price:       1000,
                 isDefault:   false,
                 popular:     true,
@@ -816,7 +816,7 @@ const FRAMES = [
             {
                 id:          'hookset-dt-xo1-mech',
                 name:        'SRAM XO1 Eagle / Maven Base',
-                description: 'SRAM XO1 Eagle 12-speed mechanical, Maven Base brakes. White Industries crankset & chainring included.',
+                description: 'SRAM XO1 Eagle 12-speed mechanical, Maven Base brakes. White Industries crankset and chainring.',
                 price:       1100,
                 isDefault:   false,
                 popular:     false,
@@ -824,7 +824,7 @@ const FRAMES = [
             {
                 id:          'hookset-dt-xt-di2',
                 name:        'Shimano XT Di2 / XT Brakes',
-                description: 'Shimano XT Di2 12-speed electronic, XT quad-piston brakes. White Industries crankset & chainring included.',
+                description: 'Shimano XT Di2 12-speed electronic, XT quad-piston brakes. White Industries crankset and chainring.',
                 price:       1100,
                 isDefault:   false,
                 popular:     false,
@@ -832,7 +832,7 @@ const FRAMES = [
             {
                 id:          'hookset-dt-xtr-di2',
                 name:        'Shimano XTR Di2 / XTR Brakes',
-                description: 'Shimano XTR Di2 12-speed electronic, XTR quad-piston brakes. White Industries crankset & chainring included.',
+                description: 'Shimano XTR Di2 12-speed electronic, XTR quad-piston brakes. White Industries crankset and chainring.',
                 price:       1500,
                 isDefault:   true,   // ← Standard / default option
                 popular:     false,
@@ -840,7 +840,7 @@ const FRAMES = [
             {
                 id:          'hookset-dt-xo-axs',
                 name:        'SRAM XO AXS / Maven Silver',
-                description: 'SRAM XO eTap AXS wireless 12-speed, Maven Silver brakes. White Industries crankset & chainring included.',
+                description: 'SRAM XO eTap AXS wireless 12-speed, Maven Silver brakes. White Industries crankset and chainring.',
                 price:       1800,
                 isDefault:   false,
                 popular:     false,
@@ -848,7 +848,7 @@ const FRAMES = [
             {
                 id:          'hookset-dt-xx-axs',
                 name:        'SRAM XX AXS / Maven Ultimate',
-                description: 'SRAM XX eTap AXS wireless 12-speed, Maven Ultimate brakes. White Industries crankset & chainring included.',
+                description: 'SRAM XX eTap AXS wireless 12-speed, Maven Ultimate brakes. White Industries crankset and chainring.',
                 price:       2300,
                 isDefault:   false,
                 popular:     true,
@@ -871,7 +871,7 @@ const FRAMES = [
             {
                 id:          'ana-dt-grx-mech',
                 name:        'Shimano GRX 820 Mechanical',
-                description: 'GRX 820 mechanical groupset. White Industries crankset & chainring included.',
+                description: 'GRX 820 mechanical groupset. White Industries crankset and chainring.',
                 price:       1340,
                 isDefault:   false,
                 popular:     false,
@@ -879,7 +879,7 @@ const FRAMES = [
             {
                 id:          'ana-dt-grx-di2',
                 name:        'Shimano GRX 820 Di2',
-                description: 'GRX 820 electronic groupset. White Industries crankset & chainring included.',
+                description: 'GRX 820 electronic groupset. White Industries crankset and chainring.',
                 price:       2463.17,
                 isDefault:   true,   // ← Standard / default option
                 popular:     true,
@@ -887,7 +887,7 @@ const FRAMES = [
             {
                 id:          'ana-dt-red-axs',
                 name:        'SRAM RED AXS',
-                description: 'SRAM RED eTap AXS wireless electronic groupset. White Industries crankset & chainring included.',
+                description: 'SRAM RED eTap AXS wireless electronic groupset. White Industries crankset and chainring.',
                 price:       2695.62,
                 isDefault:   false,
                 popular:     false,
