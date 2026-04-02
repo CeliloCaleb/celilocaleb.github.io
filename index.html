@@ -504,7 +504,7 @@
     <!-- Step 4: Wheels -->
     <div class="step" id="step-4">
         <div class="step-title">Choose Your Wheels</div>
-        <div class="step-sub">Rim and hub combos. Prices shown relative to the standard build.</div>
+        <div class="step-sub">Rim and hub options for your build.</div>
         <div class="cards" id="wheels-cards"></div>
         <div class="nav">
             <button class="btn btn-ghost" onclick="goTo(3)">← Back</button>
@@ -515,7 +515,7 @@
     <!-- Step 5: Cockpit -->
     <div class="step" id="step-5">
         <div class="step-title">Choose Your Cockpit</div>
-        <div class="step-sub">Handlebars, stem, and seatpost. Prices shown relative to the standard build.</div>
+        <div class="step-sub">Stem, handlebars, and seatpost options for your build.</div>
         <div class="cards" id="ck-cards"></div>
         <div class="nav">
             <button class="btn btn-ghost" onclick="goTo(4)">← Back</button>
@@ -583,11 +583,11 @@
 //    isDefault   - true for the middle/standard option (only one per array)
 //    popular     - true to show a "Popular" badge (optional)
 //
-//  FIXED is the base price: $4,000 frame + $250 (tires, headset, BB).
+//  FIXED is the base price: $4,000 frame + $250 (White Industries headset & BB) + $300 (tires, grips/bar tape, saddle allowance).
 //  Everything else is added on top.
 // ═══════════════════════════════════════════════════════════════════
 
-const FIXED = 4250; // $4,000 frame + $250 (tires, Cane Creek headset & BB)
+const FIXED = 4550; // $4,000 frame + $250 (White Industries headset & BB) + $300 (tires, grips/bar tape, saddle allowance)
 
 // ─── SHARED OPTIONS ───────────────────────────────────────────────
 // WHEELS and COCKPIT are shared by Redd & Anadromous.
@@ -662,7 +662,7 @@ const COCKPIT = [
     {
         id:          'ck-fixed',
         name:        'Thomson Elite / Fixed Post',
-        description: 'Thomson Elite stem, handlebars of your choice, Thomson Elite fixed seatpost',
+        description: 'Thomson Elite cockpit with Thomson Elite fixed seatpost',
         price:       420,
         isDefault:   false,
         popular:     false,
@@ -670,7 +670,7 @@ const COCKPIT = [
     {
         id:          'ck-dropper',
         name:        'Thomson Elite / Dropper Post',
-        description: 'Thomson Elite stem, handlebars of your choice, cable-actuated dropper seatpost',
+        description: 'Thomson Elite cockpit with cable-actuated dropper seatpost',
         price:       520,
         isDefault:   true,   // ← Standard / default option
         popular:     false,
@@ -678,7 +678,7 @@ const COCKPIT = [
     {
         id:          'ck-dropper-wireless',
         name:        'Thomson Elite / RockShox Reverb AXS',
-        description: 'Thomson Elite stem, handlebars of your choice, RockShox Reverb AXS wireless electronic dropper post',
+        description: 'Thomson Elite cockpit with RockShox Reverb AXS wireless electronic dropper post',
         price:       720,
         isDefault:   false,
         popular:     false,
@@ -900,7 +900,7 @@ const FRAMES = [
 
 ];
 
-const FRAME_PRICE = 4000; // Frame-only price (no tires/headset/BB allowance beyond headset+BB)
+const FRAME_PRICE = 4250; // $4,000 frame + $250 (White Industries headset & BB)
 
 // ═══════════════════════════════════════════════════════════════════
 //  STATE
@@ -1001,7 +1001,7 @@ function buildText() {
             'Frame:    ' + f.name + ' (' + f.type + ')',
         ];
         if (foHasFork) lines.push('Fork:     ' + foFk.name + '  ' + fmt(foFk.price));
-        lines.push('Included: Cane Creek BB & Headset');
+        lines.push('Included: White Industries BB & Headset');
         lines.push('');
         lines.push((foHasFork ? 'Estimated Total: ' : 'Price: ') + fmt(foTotal));
         return lines.join('\n');
@@ -1016,7 +1016,7 @@ function buildText() {
         `Drivetrain: ${d?.name}  ${d?.price !== null ? fmt(d.price) : '(TBD)'}`,
         `Wheels:     ${w?.name}  ${w?.price !== null ? fmt(w.price) : '(TBD)'}`,
         `Cockpit:    ${c?.name}  ${c?.price !== null ? fmt(c.price) : '(TBD)'}`,
-        `Fixed:      Cane Creek BB & Headset + Tires/Grips/Saddle allowance  $250`,
+        `Fixed:      White Industries BB & Headset $250 · Tires/Grips/Saddle allowance $300`,
         '',
         `Estimated Total: ${hasTBD ? 'From ' + fmt(sum) + ' (drivetrain TBD)' : fmt(sum)}`,
     ].join('\n');
@@ -1112,7 +1112,7 @@ function renderSummary() {
             </div>` : ''}
             <div class="summary-included">
                 <div class="si-label">✓ Included</div>
-                <div class="si-items">Cane Creek Bottom Bracket &amp; Headset</div>
+                <div class="si-items">White Industries Bottom Bracket &amp; Headset</div>
             </div>
             <div class="summary-note">Frame color, custom color schemes, inlays, and other details will be confirmed with you before we start building.</div>
             <div class="total-row">
@@ -1148,9 +1148,9 @@ function renderSummary() {
         `).join('')}
         <div class="summary-included">
             <div class="si-label">✓ Standard on every build</div>
-            <div class="si-items">Cane Creek Bottom Bracket &amp; Headset · White Industries Crankset &amp; Chainring</div>
+            <div class="si-items">White Industries Bottom Bracket &amp; Headset · White Industries Crankset &amp; Chainring</div>
         </div>
-        <div class="summary-note">Tires, grips / bar tape, saddle, frame color, custom color schemes, anodization, and inlays will be confirmed with you before we start building.</div>
+        <div class="summary-note">A $300 allowance for tires, grips / bar tape, and saddle is included in this estimate. Frame color, custom color schemes, anodization, and inlays will be confirmed with you before we start building.</div>
         <div class="total-row">
             <div class="total-label">Estimated Total</div>
             <div class="total-amount">${hasTBD ? 'From ' + fmt(sum) : fmt(sum)}</div>
@@ -1197,7 +1197,7 @@ function pickBuildType(type) {
 function renderBuildType() {
     const types = [
         { id: 'full',       name: 'Complete Build',  desc: 'Frame, fork, drivetrain, wheels, and cockpit. Ready to ride.' },
-        { id: 'frame-only', name: 'Frame Only',      desc: 'Just the frame with Cane Creek headset and bottom bracket. Add an optional fork on the next step.' },
+        { id: 'frame-only', name: 'Frame Only',      desc: 'Just the frame with White Industries headset and bottom bracket. Add an optional fork on the next step.' },
     ];
     document.getElementById('build-type-cards').innerHTML = types.map(t => `
         <div class="card ${S.buildType === t.id ? 'selected' : ''}" onclick="pickBuildType('${t.id}')">
