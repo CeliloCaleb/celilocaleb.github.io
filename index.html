@@ -583,11 +583,11 @@
 //    isDefault   - true for the middle/standard option (only one per array)
 //    popular     - true to show a "Popular" badge (optional)
 //
-//  FIXED is the base price: $4,000 frame + $250 (White Industries headset & BB) + $300 (tires, grips/bar tape, saddle allowance).
+//  FIXED is the base price: $4,000 frame + $250 (White Industries headset & BB).
 //  Everything else is added on top.
 // ═══════════════════════════════════════════════════════════════════
 
-const FIXED = 4550; // $4,000 frame + $250 (White Industries headset & BB) + $300 (tires, grips/bar tape, saddle allowance)
+const FIXED = 4250; // $4,000 frame + $250 (White Industries headset & BB)
 
 // ─── SHARED OPTIONS ───────────────────────────────────────────────
 // WHEELS and COCKPIT are shared by Redd & Anadromous.
@@ -1016,7 +1016,7 @@ function buildText() {
         `Drivetrain: ${d?.name}  ${d?.price !== null ? fmt(d.price) : '(TBD)'}`,
         `Wheels:     ${w?.name}  ${w?.price !== null ? fmt(w.price) : '(TBD)'}`,
         `Cockpit:    ${c?.name}  ${c?.price !== null ? fmt(c.price) : '(TBD)'}`,
-        `Fixed:      White Industries BB & Headset $250 · Tires/Grips/Saddle allowance $300`,
+        `Fixed:      White Industries BB & Headset  $250`,
         '',
         `Estimated Total: ${hasTBD ? 'From ' + fmt(sum) + ' (drivetrain TBD)' : fmt(sum)}`,
     ].join('\n');
@@ -1150,7 +1150,7 @@ function renderSummary() {
             <div class="si-label">✓ Standard on every build</div>
             <div class="si-items">White Industries Bottom Bracket &amp; Headset · White Industries Crankset &amp; Chainring</div>
         </div>
-        <div class="summary-note">A $300 allowance for tires, grips / bar tape, and saddle is included in this estimate. Frame color, custom color schemes, anodization, and inlays will be confirmed with you before we start building.</div>
+        <div class="summary-note">Frame color, custom color schemes, anodization, and inlays will be confirmed with you before we start building.</div>
         <div class="total-row">
             <div class="total-label">Estimated Total</div>
             <div class="total-amount">${hasTBD ? 'From ' + fmt(sum) : fmt(sum)}</div>
