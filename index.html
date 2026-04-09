@@ -688,14 +688,6 @@ const COCKPIT = [
 // ─── RIGID FORK OPTIONS (Redd + Anadromous) ───────────────────────
 const RIGID_FORKS = [
     {
-        id:          'fork-celilo-carbon',
-        name:        'Celilo Carbon Fork',
-        description: 'Celilo-designed full carbon rigid fork',
-        price:       300,
-        isDefault:   false,
-        popular:     false,
-    },
-    {
         id:          'fork-enve',
         name:        'ENVE Adventure Fork',
         description: 'ENVE Adventure carbon rigid fork with triple-boss mounts',
@@ -863,7 +855,7 @@ const FRAMES = [
         id:          'anadromous',
         name:        'Anadromous',
         type:        'Drop Bar MTB / Monstercross / ATB',
-        description: 'Drop-bar capability meets trail-ready geometry. The Anadromous does it all: monstercross, bikepacking, all-terrain riding wherever the road ends and the adventure begins.',
+        description: 'Drop-bar capability meets trail-ready geometry, with clearance for big tires and boost-spaced wheels. The Anadromous does it all: monstercross, bikepacking, all-terrain riding wherever the road ends and the adventure begins.',
 
         forks: RIGID_FORKS,
 
@@ -1072,8 +1064,6 @@ function renderOptions(containerId, arr, selectedId, onPickFn) {
         return `
             <div class="card ${selectedId === o.id ? 'selected' : ''} ${isDefault ? 'is-default' : ''}"
                  onclick="${onPickFn}('${o.id}')">
-                ${isDefault   ? '<div class="tag tag-default">Standard</div>' : ''}
-                ${o.popular && !isDefault ? '<div class="tag tag-popular">Popular</div>' : ''}
                 <div class="radio"><div class="radio-dot"></div></div>
                 <div class="card-body">
                     <div class="card-name">${o.name}</div>
