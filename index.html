@@ -591,23 +591,23 @@ const FIXED = 4250; // $4,000 frame + $250 (White Industries headset & BB)
 
 // ─── SHARED OPTIONS ───────────────────────────────────────────────
 // WHEELS and COCKPIT are shared by Redd & Anadromous.
-// Hookset uses HOOKSET_WHEELS (Serpentine instead of Astral, no Berd/Talon).
+// Hookset uses HOOKSET_WHEELS (no Berd/Talon).
 // Fork and drivetrain are always frame-specific (see FRAMES below).
 // ──────────────────────────────────────────────────────────────────
 
 const WHEELS = [
     {
         id:          'wh-alloy-wi',
-        name:        'Astral Wanderlust Alloy / White Industries CLD',
-        description: 'Astral Wanderlust alloy rims laced to White Industries CLD hubs',
+        name:        'Serpentine Alloy / White Industries CLD',
+        description: 'Serpentine alloy rims laced to White Industries CLD hubs',
         price:       1000,
         isDefault:   false,
         popular:     false,
     },
     {
         id:          'wh-carbon-wi',
-        name:        'Astral Wanderlust Carbon / White Industries CLD',
-        description: 'Astral Wanderlust carbon rims laced to White Industries CLD hubs',
+        name:        'Serpentine Carbon / White Industries CLD',
+        description: 'Serpentine carbon rims laced to White Industries CLD hubs',
         price:       2000,
         isDefault:   true,   // ← Standard / default option
         popular:     false,
@@ -675,14 +675,6 @@ const COCKPIT = [
         isDefault:   true,   // ← Standard / default option
         popular:     false,
     },
-    {
-        id:          'ck-dropper-wireless',
-        name:        'Thomson Elite / RockShox Reverb AXS',
-        description: 'Thomson Elite cockpit with RockShox Reverb AXS wireless electronic dropper post',
-        price:       720,
-        isDefault:   false,
-        popular:     false,
-    },
 ];
 
 // ─── RIGID FORK OPTIONS (Redd + Anadromous) ───────────────────────
@@ -727,8 +719,8 @@ const FRAMES = [
         drivetrain: [
             {
                 id:          'redd-dt-grx-mech',
-                name:        'Shimano GRX 827 Mechanical',
-                description: 'GRX 827 mechanical groupset. White Industries crankset and chainring.',
+                name:        'Shimano GRX 822 Mechanical',
+                description: 'GRX 822 mechanical groupset. White Industries crankset and chainring.',
                 price:       900,
                 isDefault:   false,
                 popular:     false,
@@ -818,7 +810,7 @@ const FRAMES = [
                 name:        'Shimano XT Di2 / XT Brakes',
                 description: 'Shimano XT Di2 12-speed electronic, XT quad-piston brakes. White Industries crankset and chainring.',
                 price:       1100,
-                isDefault:   false,
+                isDefault:   true,   // ← Standard / default option
                 popular:     false,
             },
             {
@@ -826,7 +818,7 @@ const FRAMES = [
                 name:        'Shimano XTR Di2 / XTR Brakes',
                 description: 'Shimano XTR Di2 12-speed electronic, XTR quad-piston brakes. White Industries crankset and chainring.',
                 price:       1500,
-                isDefault:   true,   // ← Standard / default option
+                isDefault:   false,
                 popular:     false,
             },
             {
@@ -862,8 +854,8 @@ const FRAMES = [
         drivetrain: [
             {
                 id:          'ana-dt-grx-mech',
-                name:        'Shimano GRX 827 Mechanical',
-                description: 'GRX 827 mechanical groupset. White Industries crankset and chainring.',
+                name:        'Shimano GRX 822 Mechanical',
+                description: 'GRX 822 mechanical groupset. White Industries crankset and chainring.',
                 price:       900,
                 isDefault:   false,
                 popular:     false,
